@@ -36,9 +36,14 @@ yarn-error.log*
 
 # Production
 /frontend/build
+/frontend/dist
+
+# Vite specific
+/frontend/.vite/
 
 # Testing
 /coverage
+/frontend/coverage
 
 # Environment variables
 .env
@@ -47,9 +52,21 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Caches
+.npm
+.eslintcache
+
 # Editor directories and files
 .idea/
 .vscode/
 *.swp
 *.swo
 .DS_Store
+Thumbs.db
