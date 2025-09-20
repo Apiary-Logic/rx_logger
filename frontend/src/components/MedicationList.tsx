@@ -63,9 +63,7 @@ function formatMedTimestamp(isoString: string): {
     return { label: `Yesterday`, fine };
   } else {
     // Check if within last 7 days
-    const daysAgo = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    const daysAgo = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
     if (daysAgo < 7 && daysAgo > 0) {
       return {
         label: date.toLocaleDateString(undefined, { weekday: "long" }),
@@ -99,8 +97,7 @@ function getPartOfDayIconAndColor(label: string) {
     return { icon: <Brightness2Icon fontSize="small" />, color: "default" };
   if (label.includes("night") || label.includes("overnight"))
     return { icon: <NightsStayIcon fontSize="small" />, color: "default" };
-  if (label === "Yesterday")
-    return { icon: <TodayIcon fontSize="small" />, color: "default" };
+  if (label === "Yesterday") return { icon: <TodayIcon fontSize="small" />, color: "default" };
   if (label.match(/^[A-Za-z]+day$/))
     return { icon: <CalendarTodayIcon fontSize="small" />, color: "default" };
   return { icon: <AccessTimeIcon fontSize="small" />, color: "default" };
@@ -157,9 +154,8 @@ const MedicationList: React.FC = () => {
     fetchLogs();
   }, []);
 
-  // Rest of the component remains unchanged
   return (
-    <Box sx={{ p: { xs: 1, sm: 3 }, maxWidth: 700, mx: "auto" }}>
+    <Box sx={{ px: { xs: 1, sm: 3 }, pb: 3, maxWidth: 700, mx: "auto" }}>
       <Card
         sx={{
           borderRadius: 5,
@@ -169,12 +165,7 @@ const MedicationList: React.FC = () => {
           py: 3,
         }}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={2}
-        >
+        <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
           <Typography
             variant="h5"
             sx={{
@@ -195,12 +186,7 @@ const MedicationList: React.FC = () => {
           </Button>
         </Box>
         {loading ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            minHeight={120}
-          >
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight={120}>
             <CircularProgress />
           </Box>
         ) : error ? (
@@ -262,14 +248,13 @@ const MedicationList: React.FC = () => {
                             color === "warning"
                               ? "linear-gradient(90deg,#ffe082,#fffde7)"
                               : color === "primary"
-                              ? "linear-gradient(90deg,#90caf9,#e3f2fd)"
-                              : color === "info"
-                              ? "linear-gradient(90deg,#b3e5fc,#e1f5fe)"
-                              : color === "secondary"
-                              ? "linear-gradient(90deg,#ce93d8,#f3e5f5)"
-                              : "#f5f5f5",
-                          color:
-                            color === "default" ? "text.primary" : undefined,
+                                ? "linear-gradient(90deg,#90caf9,#e3f2fd)"
+                                : color === "info"
+                                  ? "linear-gradient(90deg,#b3e5fc,#e1f5fe)"
+                                  : color === "secondary"
+                                    ? "linear-gradient(90deg,#ce93d8,#f3e5f5)"
+                                    : "#f5f5f5",
+                          color: color === "default" ? "text.primary" : undefined,
                           boxShadow: "none",
                           mr: 1,
                         }}
@@ -283,11 +268,7 @@ const MedicationList: React.FC = () => {
                       {formatMedTimestamp(log.timestamp).fine}
                     </Typography>
                     {log.notes && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mt: 1 }}
-                      >
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                         <strong>Notes:</strong> {log.notes}
                       </Typography>
                     )}

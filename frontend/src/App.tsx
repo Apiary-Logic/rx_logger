@@ -10,10 +10,8 @@ import DueMedicationsPanel from "./components/DueMedicationsPanel";
 import "./index.css";
 
 /**
- * Main App component serving as the application layout
- *
  * Layout structure:
- * - Header: App title and branding
+ * - Header: Title and branding
  * - Left column (md-5):
  *   - MedicationLogForm: Form to log new medications
  *   - AddMedicationDialog: Placeholder for future medication management

@@ -29,7 +29,7 @@ def generate_med_logs(days=30):
         if i in late_days:
             time += timedelta(hours=random.randint(1, 2))  # Make some entries late
         log.append({
-            'medication': 'Adderall',
+            'medication': 'Medication A',
             'timestamp': time.strftime('%Y-%m-%d %H:%M:%S')
         })
     return log
