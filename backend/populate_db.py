@@ -4,7 +4,8 @@ import sqlite3
 import os
 
 # Path to the SQLite database file
-DB_PATH = 'medications.db'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'medications.db')
 
 def generate_med_logs(days=30):
     """

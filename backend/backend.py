@@ -6,7 +6,8 @@ import os
 # Flask application for Medication Tracker API
 # Provides endpoints for logging medications and retrieving medication history
 app = Flask(__name__)
-DB_PATH = 'medications.db'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'medications.db')
 
 def init_db():
     """Initialize database with medications table if it doesn't exist"""
@@ -42,7 +43,7 @@ def log_med():
     data = request.json
     medication = data.get('medication')
     timestamp = data.get('timestamp')
-    source = data.get('source', 'nfc')
+    source = data.get('source', 'manual')
     notes = data.get('notes', '')
     if not medication or not timestamp:
         return jsonify({'error': 'Medication and timestamp are required!'}), 400
@@ -68,12 +69,13 @@ def get_medications():
         cursor.execute('SELECT * FROM medications ORDER BY timestamp DESC')
         medications = cursor.fetchall()
         return jsonify(medications), 200
-
+    
 if __name__ == '__main__':
-    # WARNING: For development only - resets database on each restart
-    # TODO: Remove these lines for production
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
     if not os.path.exists(DB_PATH):
         init_db()
+    # For testing, nuke the database on each run
+    # else:
+    #     os.remove(DB_PATH)
+    #     init_db()
+    
     app.run(debug=True, host='0.0.0.0', port=5000)

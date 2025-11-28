@@ -4,20 +4,17 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import InputAdornment from "@mui/material/InputAdornment";
 
-/**
- * Available medication log sources
- * Can be extended with additional sources in the future
- */
-const sources = [
-  { value: "manual", label: "Manual" },
-  { value: "scanner", label: "Scanner" },
-  { value: "nfc", label: "NFC" },
-];
+/** Local datetime helper */
+const getCurrentISODateTime = () => {
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  const localDate = new Date(now.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16);
+};
 
 /**
  * MedicationLogForm component allows users to log medication intake
@@ -25,17 +22,13 @@ const sources = [
  * Features:
  * - Form for entering medication name, time taken, source, and optional notes
  * - Date/time picker with "Now" shortcut button
- * - Source selector for tracking how the medication was logged
  * - Success and error notifications
  * - Form resets after successful submission
  */
 const MedicationLogForm: React.FC = () => {
   // Form state
   const [medication, setMedication] = useState("");
-  const [timestamp, setTimestamp] = useState(
-    () => new Date().toISOString().slice(0, 16) // Format for datetime-local input
-  );
-  const [source, setSource] = useState("manual");
+  const [timestamp, setTimestamp] = useState(getCurrentISODateTime());
   const [notes, setNotes] = useState("");
 
   // UI state
@@ -54,7 +47,7 @@ const MedicationLogForm: React.FC = () => {
       const res = await fetch("/log", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ medication, timestamp, source, notes }),
+        body: JSON.stringify({ medication, timestamp, source: "manual", notes }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -64,7 +57,7 @@ const MedicationLogForm: React.FC = () => {
       setSuccess(true);
       setMedication("");
       setNotes("");
-      setTimestamp(new Date().toISOString().slice(0, 16));
+      setTimestamp(getCurrentISODateTime());
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -94,13 +87,7 @@ const MedicationLogForm: React.FC = () => {
       >
         Log Medication
       </Typography>
-      <Box
-        component="form"
-        display="flex"
-        flexDirection="column"
-        gap={2}
-        onSubmit={handleSubmit}
-      >
+      <Box component="form" display="flex" flexDirection="column" gap={2} onSubmit={handleSubmit}>
         <TextField
           label="Medication"
           value={medication}
@@ -109,7 +96,7 @@ const MedicationLogForm: React.FC = () => {
           InputProps={{ sx: { borderRadius: 2, bgcolor: "#fafbfc" } }}
         />
         <TextField
-          label="Timestamp"
+          label="Time Taken"
           type="datetime-local"
           value={timestamp}
           onChange={(e) => setTimestamp(e.target.value)}
@@ -122,9 +109,7 @@ const MedicationLogForm: React.FC = () => {
                 <Button
                   size="small"
                   variant="text"
-                  onClick={() =>
-                    setTimestamp(new Date().toISOString().slice(0, 16))
-                  }
+                  onClick={() => setTimestamp(getCurrentISODateTime())}
                   sx={{ minWidth: 0, px: 1, fontSize: 12 }}
                 >
                   Now
@@ -133,19 +118,6 @@ const MedicationLogForm: React.FC = () => {
             ),
           }}
         />
-        <TextField
-          select
-          label="Source"
-          value={source}
-          onChange={(e) => setSource(e.target.value)}
-          InputProps={{ sx: { borderRadius: 2, bgcolor: "#fafbfc" } }}
-        >
-          {sources.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
         <TextField
           label="Notes"
           value={notes}
@@ -163,20 +135,12 @@ const MedicationLogForm: React.FC = () => {
           {loading ? "Logging..." : "Log Medication"}
         </Button>
       </Box>
-      <Snackbar
-        open={success}
-        autoHideDuration={3000}
-        onClose={() => setSuccess(false)}
-      >
+      <Snackbar open={success} autoHideDuration={3000} onClose={() => setSuccess(false)}>
         <Alert severity="success" sx={{ width: "100%" }}>
           Medication logged successfully!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={!!error}
-        autoHideDuration={4000}
-        onClose={() => setError("")}
-      >
+      <Snackbar open={!!error} autoHideDuration={4000} onClose={() => setError("")}>
         <Alert severity="error" sx={{ width: "100%" }}>
           {error}
         </Alert>
