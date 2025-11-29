@@ -31,7 +31,7 @@ FRONTEND_PORT=3000
 
 if [ "$CLEAN" = true ]; then
   echo " Removing existing backend database"
-  rm -f "${BACKEND_DIR}/medications.db"
+  rm -f ".${BACKEND_DIR}/medications.db"
 fi
 
 if [ "$POPULATE" = true ]; then

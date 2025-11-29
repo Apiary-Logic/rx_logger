@@ -26,9 +26,11 @@ const getCurrentISODateTime = () => {
  * - Form resets after successful submission
  */
 const MedicationLogForm: React.FC = () => {
+  const initial = getCurrentISODateTime();
   // Form state
   const [medication, setMedication] = useState("");
-  const [timestamp, setTimestamp] = useState(getCurrentISODateTime());
+  const [date, setDate] = useState(initial.slice(0, 10)); // "YYYY-MM-DD"
+  const [time, setTime] = useState(initial.slice(11, 16)); // "HH:MM"
   const [notes, setNotes] = useState("");
 
   // UI state
@@ -43,6 +45,8 @@ const MedicationLogForm: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    const timestamp = `${date}T${time}:00`;
     try {
       const res = await fetch("/log", {
         method: "POST",
@@ -55,9 +59,9 @@ const MedicationLogForm: React.FC = () => {
       }
       // Reset form on success
       setSuccess(true);
-      setMedication("");
-      setNotes("");
-      setTimestamp(getCurrentISODateTime());
+
+      // Stupid way to refresh the medication list after logging, note it kills the snackbar too
+      window.location.reload();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -96,10 +100,10 @@ const MedicationLogForm: React.FC = () => {
           InputProps={{ sx: { borderRadius: 2, bgcolor: "#fafbfc" } }}
         />
         <TextField
-          label="Time Taken"
-          type="datetime-local"
-          value={timestamp}
-          onChange={(e) => setTimestamp(e.target.value)}
+          label="Date Taken"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
           InputLabelProps={{ shrink: true }}
           required
           InputProps={{
@@ -107,10 +111,35 @@ const MedicationLogForm: React.FC = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <Button
-                  size="small"
-                  variant="text"
-                  onClick={() => setTimestamp(getCurrentISODateTime())}
-                  sx={{ minWidth: 0, px: 1, fontSize: 12 }}
+                  onClick={() => {
+                    const now = getCurrentISODateTime();
+                    setDate(now.slice(0, 10));
+                  }}
+                  sx={{ textTransform: "none", fontWeight: 600 }}
+                >
+                  Today
+                </Button>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          label="Time Taken"
+          type="time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          InputLabelProps={{ shrink: true }}
+          required
+          InputProps={{
+            sx: { borderRadius: 2, bgcolor: "#fafbfc" },
+            endAdornment: (
+              <InputAdornment position="end">
+                <Button
+                  onClick={() => {
+                    const now = getCurrentISODateTime();
+                    setTime(now.slice(11, 16));
+                  }}
+                  sx={{ textTransform: "none", fontWeight: 600 }}
                 >
                   Now
                 </Button>
@@ -118,6 +147,7 @@ const MedicationLogForm: React.FC = () => {
             ),
           }}
         />
+
         <TextField
           label="Notes"
           value={notes}
