@@ -57,6 +57,7 @@ def main():
     logs = generate_med_logs()
     for log in logs:
         update_db(log)
+    print(f"Inserted {len(logs)} medication log entries into the database.")
 
 if __name__ == "__main__":
     main()
