@@ -18,7 +18,6 @@ A full-stack application for tracking medication intake with a Flask backend and
 med_logs/
 ├── backend/                  # Flask backend
 │   ├── backend.py            # Main Flask application
-│   └── populate_db.py        # Sample data generation script
 ├── frontend/                 # React frontend
 │   ├── public/               # Static files
 │   ├── src/                  # React source code
@@ -28,6 +27,9 @@ med_logs/
 │   ├── package.json          # Frontend dependencies
 │   └── tsconfig.json         # TypeScript configuration
 └── README.md
+|__ scripts/
+|   |___run_dev.sh
+│   └── populate_db.py        # Sample data generation script
 ```
 
 ## Getting Started

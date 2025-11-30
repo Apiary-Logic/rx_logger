@@ -8,10 +8,6 @@ import Box from "@mui/material/Box";
 /**
  * Header component displays the application title and branding
  *
- * Features:
- * - Clean white app bar with primary color accents
- * - Medication icon for visual identification
- * - Responsive typography with custom styling
  */
 const Header: React.FC = () => (
   <AppBar
