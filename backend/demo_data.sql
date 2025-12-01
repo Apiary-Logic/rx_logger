@@ -104,7 +104,7 @@ VALUES
         AND user_id = (SELECT id FROM users WHERE user_name = 'miss_piggy')),
     NOW() - INTERVAL '2 days',
     NOW() - INTERVAL '2 days',
-    'taken', 'manual', 'none', 'Felt fabulous after taking it.'
+    'taken', 'manual', 'none', 'A baddie fr.'
   ),
   (
     (SELECT id FROM users WHERE user_name = 'miss_piggy'),
@@ -112,6 +112,15 @@ VALUES
         AND user_id = (SELECT id FROM users WHERE user_name = 'miss_piggy')),
     NOW() - INTERVAL '1 day',
     NULL,
-    'missed', 'manual', 'none', 'Completely forgot amidst the drama.'
+    'missed', 'manual', 'none', 'Completely forgot because of the drama.'
   );
 
+-- Kermit's device add smart bottle
+INSERT INTO devices (user_id, device_id, label, default_source)
+VALUES (
+  (SELECT id FROM users WHERE user_name = 'kermit'),
+  'bottle_001',
+  'Kermit''s Smart Bottle',
+  'smart_bottle'
+)
+ON CONFLICT (device_id) DO NOTHING;
