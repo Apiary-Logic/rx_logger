@@ -77,7 +77,7 @@ def log_med():
     data = request.get_json(force=True)
     medication = data.get("medication")
     timestamp_str = data.get("timestamp")
-    source = data.get("source", "manual")
+    source = data.get("event_source",data.get("source", "manual"))
     notes = data.get("notes", "")
 
     if not medication or not timestamp_str:
